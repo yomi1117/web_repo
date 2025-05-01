@@ -2,7 +2,15 @@ const { MongoClient } = require('mongodb');
 
 // MongoDB 连接字符串
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+if (!uri) {
+    console.error('错误：未设置 MONGODB_URI 环境变量');
+}
+
+const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000
+});
 
 // 处理 GET 请求 - 获取所有留言
 async function getMessages(req, res) {
@@ -13,6 +21,8 @@ async function getMessages(req, res) {
 
     try {
         console.log('正在连接数据库...');
+        console.log('MongoDB URI:', uri ? '已设置' : '未设置');
+        
         await client.connect();
         console.log('数据库连接成功');
         
@@ -26,9 +36,23 @@ async function getMessages(req, res) {
         res.status(200).json(allMessages);
     } catch (error) {
         console.error('获取留言失败:', error);
-        res.status(500).json({ error: '获取留言失败', details: error.message });
+        console.error('错误详情:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+        });
+        res.status(500).json({ 
+            error: '获取留言失败', 
+            details: error.message,
+            type: error.name
+        });
     } finally {
-        await client.close();
+        try {
+            await client.close();
+            console.log('数据库连接已关闭');
+        } catch (err) {
+            console.error('关闭数据库连接时出错:', err);
+        }
     }
 }
 
@@ -49,6 +73,8 @@ async function addMessage(req, res) {
         }
 
         console.log('正在连接数据库...');
+        console.log('MongoDB URI:', uri ? '已设置' : '未设置');
+        
         await client.connect();
         console.log('数据库连接成功');
         
@@ -67,9 +93,23 @@ async function addMessage(req, res) {
         res.status(201).json({ success: true, id: result.insertedId });
     } catch (error) {
         console.error('添加留言失败:', error);
-        res.status(500).json({ error: '添加留言失败', details: error.message });
+        console.error('错误详情:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+        });
+        res.status(500).json({ 
+            error: '添加留言失败', 
+            details: error.message,
+            type: error.name
+        });
     } finally {
-        await client.close();
+        try {
+            await client.close();
+            console.log('数据库连接已关闭');
+        } catch (err) {
+            console.error('关闭数据库连接时出错:', err);
+        }
     }
 }
 
@@ -83,6 +123,12 @@ async function handleOptions(req, res) {
 
 // 根据请求方法处理不同的操作
 export default async function handler(req, res) {
+    console.log('收到请求:', {
+        method: req.method,
+        url: req.url,
+        body: req.body
+    });
+
     if (req.method === 'OPTIONS') {
         return handleOptions(req, res);
     } else if (req.method === 'GET') {
