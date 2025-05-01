@@ -10,13 +10,7 @@
     "routes": [
         { 
             "src": "/api/(.*)", 
-            "dest": "/api/$1",
-            "methods": ["GET", "POST", "OPTIONS"],
-            "headers": {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type"
-            }
+            "dest": "/api/$1.js"
         },
         { "src": "/asset/(.*)", "dest": "/asset/$1" },
         { "src": "/(.*)", "dest": "/$1" }
