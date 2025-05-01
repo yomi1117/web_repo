@@ -14,6 +14,8 @@ const client = new MongoClient(uri, {
 
 // 处理 GET 请求 - 获取所有留言
 async function getMessages(req, res) {
+    console.log('收到 GET 请求');
+    
     // 添加 CORS 头
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -58,13 +60,15 @@ async function getMessages(req, res) {
 
 // 处理 POST 请求 - 添加新留言
 async function addMessage(req, res) {
+    console.log('收到 POST 请求');
+    console.log('请求体:', req.body);
+    
     // 添加 CORS 头
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     try {
-        console.log('收到新留言请求:', req.body);
         const { name, email, message } = req.body;
         
         if (!name || !email || !message) {
@@ -115,6 +119,7 @@ async function addMessage(req, res) {
 
 // 处理 OPTIONS 请求
 async function handleOptions(req, res) {
+    console.log('收到 OPTIONS 请求');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -126,7 +131,8 @@ export default async function handler(req, res) {
     console.log('收到请求:', {
         method: req.method,
         url: req.url,
-        body: req.body
+        body: req.body,
+        headers: req.headers
     });
 
     if (req.method === 'OPTIONS') {

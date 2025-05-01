@@ -8,7 +8,16 @@
         { "src": "asset/**/*", "use": "@vercel/static" }
     ],
     "routes": [
-        { "src": "/api/(.*)", "dest": "/api/$1" },
+        { 
+            "src": "/api/(.*)", 
+            "dest": "/api/$1",
+            "methods": ["GET", "POST", "OPTIONS"],
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type"
+            }
+        },
         { "src": "/asset/(.*)", "dest": "/asset/$1" },
         { "src": "/(.*)", "dest": "/$1" }
     ]
