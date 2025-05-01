@@ -68,10 +68,36 @@ section {
 
 /* 英雄区域样式 */
 .hero {
-    text-align: center;
-    padding: 6rem 5%;
-    background: linear-gradient(135deg, #6dd5ed, #2193b0);
-    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 80vh;
+}
+
+.hero-content {
+    flex: 1;
+    padding-right: 2rem;
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.featured-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.featured-image:hover {
+    transform: scale(1.05);
 }
 
 .hero h1 {
@@ -167,8 +193,19 @@ footer {
         display: none;
     }
     
-    .hero h1 {
-        font-size: 2rem;
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+    
+    .hero-content {
+        padding-right: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .hero-image {
+        width: 100%;
     }
     
     section {
